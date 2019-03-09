@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 
 	flag "github.com/ogier/pflag"
 )
@@ -12,6 +14,8 @@ var (
 	force bool
 )
 
+var goneBranch = regexp.MustCompile("^\\*|\\s (?P<Branch>.*) \\w* \\[.*: gone\\] \\w*$")
+
 func checkForError(e error) {
 	if e != nil {
 		fmt.Fprintln(os.Stderr, e)
@@ -19,12 +23,27 @@ func checkForError(e error) {
 	}
 }
 
+func filter(ss []string, test func(string) bool) (ret []string) {
+	for _, s := range ss {
+		if test(s) {
+			ret = append(ret, s)
+		}
+	}
+	return
+}
+
 func main() {
 	flag.Parse()
 	git := Git{}
 
 	git.Fetch().Prune().ListRemoteBranches()
-	fmt.Println(git.output)
+	lines := strings.Split(git.output, "\n")
+	for _, line := range lines {
+		matches := goneBranch.FindStringSubmatch(line)
+		if len(matches) == 2 && matches[1] != "" {
+			fmt.Printf("delete this branch: %s\n", matches[1])
+		}
+	}
 
 	fmt.Println("Done.")
 }
