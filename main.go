@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	flag "github.com/ogier/pflag"
 )
@@ -22,16 +21,9 @@ func checkForError(e error) {
 
 func main() {
 	flag.Parse()
+	git := Git{}
 
-	cmd := "git"
-	args := []string{"status"}
-
-	out, err := exec.Command(cmd, args...).Output()
-	checkForError(err)
-
-	// Can I combine these?
-	formattedOutput := fmt.Sprintf("%s", out)
-	fmt.Println(formattedOutput)
+	checkForError(git.Fetch())
 
 	fmt.Println("Done.")
 }
