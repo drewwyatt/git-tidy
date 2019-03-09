@@ -1,4 +1,4 @@
-package main
+package git
 
 import (
 	"fmt"
@@ -9,9 +9,9 @@ const cmd = "git"
 
 // Git Namespace for git command execution
 type Git struct {
-	output    string
-	rawOutput []byte
-	error     error
+	Output    string
+	RawOutput []byte
+	Error     error
 }
 
 func reportProcess(name string) {
@@ -19,9 +19,9 @@ func reportProcess(name string) {
 }
 
 func (g *Git) setOutputAndError(output []byte, error error) {
-	g.rawOutput = output
-	g.output = string(output)
-	g.error = error
+	g.RawOutput = output
+	g.Output = string(output)
+	g.Error = error
 }
 
 // Fetch execture git fetch command
