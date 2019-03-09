@@ -13,7 +13,7 @@ var (
 	force bool
 )
 
-var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:]+: gone\].*$`)
+var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:\n]+: gone\].*$`)
 
 func checkForError(e error) {
 	if e != nil {
