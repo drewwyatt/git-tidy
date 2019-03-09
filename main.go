@@ -23,7 +23,9 @@ func main() {
 	flag.Parse()
 	git := Git{}
 
-	checkForError(git.Fetch())
+	git.Fetch()
+	git.ListRemoteBranches()
+	fmt.Println(git.output)
 
 	fmt.Println("Done.")
 }
