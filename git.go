@@ -38,3 +38,11 @@ func (g *Git) ListRemoteBranches() *Git {
 	g.setOutputAndError(exec.Command(cmd, args...).Output())
 	return g
 }
+
+// Prune executes git remote prune origin
+func (g *Git) Prune() *Git {
+	reportProcess("git remote prune origin")
+	args := []string{"remote", "prune", "origin"}
+	g.setOutputAndError(exec.Command(cmd, args...).Output())
+	return g
+}

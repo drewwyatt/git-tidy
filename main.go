@@ -23,8 +23,7 @@ func main() {
 	flag.Parse()
 	git := Git{}
 
-	git.Fetch()
-	git.ListRemoteBranches()
+	git.Fetch().Prune().ListRemoteBranches()
 	fmt.Println(git.output)
 
 	fmt.Println("Done.")
