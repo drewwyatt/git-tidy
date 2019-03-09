@@ -18,21 +18,21 @@ func reportProcess(name string) {
 	fmt.Printf("Running '%s'...\n", name)
 }
 
-func (g Git) setOutputAndError(output []byte, error error) {
+func (g *Git) setOutputAndError(output []byte, error error) {
 	g.rawOutput = output
 	g.output = string(output)
 	g.error = error
 }
 
 // Fetch execture git fetch command
-func (g Git) Fetch() Git {
+func (g *Git) Fetch() *Git {
 	reportProcess("git fetch")
 	g.setOutputAndError(exec.Command(cmd, "fetch").Output())
 	return g
 }
 
 // ListRemoteBranches executes git branch -vv
-func (g Git) ListRemoteBranches() Git {
+func (g *Git) ListRemoteBranches() *Git {
 	reportProcess("git branch -vv")
 	args := []string{"branch", "-vv"}
 	g.setOutputAndError(exec.Command(cmd, args...).Output())
