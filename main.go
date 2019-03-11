@@ -5,6 +5,7 @@ import (
 	"os"
 	"regexp"
 
+	gUtils "github.com/drewwyatt/gitclean/git"
 	flag "github.com/ogier/pflag"
 )
 
@@ -24,12 +25,12 @@ func checkForError(e error) {
 
 func main() {
 	flag.Parse()
-	git := Git{}
+	git := gUtils.Git{}
 
 	git.Fetch().Prune().ListRemoteBranches()
-	submatches := goneBranch.FindAllStringSubmatch(git.output, -1)
+	submatches := goneBranch.FindAllStringSubmatch(git.Output, -1)
 	for _, matches := range submatches {
-		if len(matches) == 2 && matches[0] != "" {
+		if len(matches) == 2 && matches[1] != "" {
 			fmt.Printf("delete this branch: %s\n", matches[1])
 		}
 	}
