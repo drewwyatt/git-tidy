@@ -31,12 +31,9 @@ func main() {
 	submatches := goneBranch.FindAllStringSubmatch(git.Output, -1)
 	for _, matches := range submatches {
 		if len(matches) == 2 && matches[1] != "" {
-			fmt.Printf("delete this branch: %s\n", matches[1])
+			git.Delete(matches[1], force)
 		}
 	}
-
-	git.Delete("hey", force)
-	git.Delete("ho", force)
 
 	if len(git.DeletedBranches) > 0 {
 		fmt.Println("Deleted branches:")
