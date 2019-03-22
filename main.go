@@ -35,6 +35,23 @@ func main() {
 		}
 	}
 
+	git.Delete("hey", force)
+	git.Delete("ho", force)
+
+	if len(git.DeletedBranches) > 0 {
+		fmt.Println("Deleted branches:")
+		for _, branch := range git.DeletedBranches {
+			fmt.Println(branch)
+		}
+	}
+
+	if len(git.BranchDeletionErrors) > 0 {
+		fmt.Println("Errors:")
+		for _, err := range git.BranchDeletionErrors {
+			fmt.Printf("[%s]: %s", err.Branch, err.Msg)
+		}
+	}
+
 	fmt.Println("Done.")
 }
 
