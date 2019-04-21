@@ -5,13 +5,16 @@ import (
 	"os"
 	"regexp"
 
+	"gopkg.in/AlecAivazis/survey.v1"
+
 	gUtils "github.com/drewwyatt/gitclean/git"
 	flag "github.com/ogier/pflag"
 )
 
 // flags
 var (
-	force bool
+	force       bool
+	interactive bool
 )
 
 var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:\n]+: gone\].*$`)
@@ -27,12 +30,29 @@ func main() {
 	flag.Parse()
 	git := gUtils.Git{}
 
+	goneBranches := []string{}
+	branchesToDelete := []string{}
+
 	git.Fetch().Prune().ListRemoteBranches()
 	submatches := goneBranch.FindAllStringSubmatch(git.Output, -1)
 	for _, matches := range submatches {
 		if len(matches) == 2 && matches[1] != "" {
-			git.Delete(matches[1], force)
+			if interactive {
+				goneBranches = append(goneBranches, matches[1])
+			} else {
+				branchesToDelete = append(branchesToDelete, matches[1])
+			}
 		}
+	}
+
+	prompt := &survey.MultiSelect{
+		Message: "Use the spacebar to select the branches you would like to delete:",
+		Options: goneBranches,
+	}
+	survey.AskOne(prompt, &branchesToDelete, nil)
+
+	for _, branch := range branchesToDelete {
+		git.Delete(branch, force)
 	}
 
 	if len(git.DeletedBranches) > 0 {
@@ -54,4 +74,5 @@ func main() {
 
 func init() {
 	flag.BoolVarP(&force, "force", "f", false, "Force delete")
+	flag.BoolVarP(&interactive, "interactive", "i", false, "Select branches you would like to delete from a list")
 }
