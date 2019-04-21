@@ -23,4 +23,20 @@ $ gitclean # executes "git branch -d" on ": gone" branches
 
 ```bash
 $ gitclean -f # same as above, but with "-D" instead of "-d"
+# or
+$ gitclean --force
+```
+
+**Interactive**
+
+Present all ": gone" branches in a checkbox list, allowing user to opt-in to deletions.
+
+```bash
+$ gitclean -i
+# or
+$ gitclean --interactive
+# with force:
+$ gitclean -if
+# or
+$ gitclean --interactive --force
 ```
