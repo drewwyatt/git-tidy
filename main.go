@@ -11,10 +11,14 @@ import (
 	flag "github.com/ogier/pflag"
 )
 
+// build info
+var version = "development snapshot"
+
 // flags
 var (
-	force       bool
-	interactive bool
+	force        bool
+	interactive  bool
+	printVersion bool
 )
 
 var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:\n]+: gone\].*$`)
@@ -28,6 +32,12 @@ func checkForError(e error) {
 
 func main() {
 	flag.Parse()
+
+	if printVersion {
+		fmt.Println(version)
+		return
+	}
+
 	git := gUtils.Git{}
 
 	goneBranches := []string{}
@@ -75,4 +85,5 @@ func main() {
 func init() {
 	flag.BoolVarP(&force, "force", "f", false, "Force delete")
 	flag.BoolVarP(&interactive, "interactive", "i", false, "Select branches you would like to delete from a list")
+	flag.BoolVarP(&printVersion, "version", "v", false, "Print the version of gitclean")
 }
