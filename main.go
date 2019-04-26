@@ -1,17 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"regexp"
-
-	"gopkg.in/AlecAivazis/survey.v1"
-
-	gUtils "github.com/drewwyatt/gitclean/git"
+	"github.com/drewwyatt/gitclean/commands"
 	flag "github.com/ogier/pflag"
 )
 
-// build info
+// build info injected by gitclean
 var version = "development snapshot"
 
 // flags
@@ -21,70 +15,20 @@ var (
 	printVersion bool
 )
 
-var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:\n]+: gone\].*$`)
-
-func checkForError(e error) {
-	if e != nil {
-		fmt.Fprintln(os.Stderr, e)
-		os.Exit(1)
-	}
-}
-
 func main() {
 	flag.Parse()
+	directory := flag.Arg(0) // first trailing argument after flags (if any)
 
-	if printVersion {
-		fmt.Println(version)
+	intent := commands.NewIntent(printVersion)
+
+	switch i := intent.Is(); i {
+	case commands.VersionIntent:
+		commands.Version(version)
+		return
+	default:
+		commands.Default(directory, interactive, force)
 		return
 	}
-
-	directory := flag.Arg(0) // first trailing argument after flags (if any)
-	if directory == "" {
-		directory = "."
-	}
-
-	git := gUtils.NewExecutor(directory)
-
-	goneBranches := []string{}
-	branchesToDelete := []string{}
-
-	git.Fetch().Prune().ListRemoteBranches()
-	submatches := goneBranch.FindAllStringSubmatch(git.Output, -1)
-	for _, matches := range submatches {
-		if len(matches) == 2 && matches[1] != "" {
-			if interactive {
-				goneBranches = append(goneBranches, matches[1])
-			} else {
-				branchesToDelete = append(branchesToDelete, matches[1])
-			}
-		}
-	}
-
-	prompt := &survey.MultiSelect{
-		Message: "Use the spacebar to select the branches you would like to delete:",
-		Options: goneBranches,
-	}
-	survey.AskOne(prompt, &branchesToDelete, nil)
-
-	for _, branch := range branchesToDelete {
-		git.Delete(branch, force)
-	}
-
-	if len(git.DeletedBranches) > 0 {
-		fmt.Println("Deleted branches:")
-		for _, branch := range git.DeletedBranches {
-			fmt.Println(branch)
-		}
-	}
-
-	if len(git.BranchDeletionErrors) > 0 {
-		fmt.Println("Errors:")
-		for _, err := range git.BranchDeletionErrors {
-			fmt.Printf("[%s]: %s", err.Branch, err.Msg)
-		}
-	}
-
-	fmt.Println("Done.")
 }
 
 func init() {
