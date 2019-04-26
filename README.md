@@ -19,7 +19,7 @@ $ brew install gitclean
 $ gitclean # executes "git branch -d" on ": gone" branches
 ```
 
-**With force delete:**
+### With force delete
 
 ```bash
 $ gitclean -f # same as above, but with "-D" instead of "-d"
@@ -27,7 +27,7 @@ $ gitclean -f # same as above, but with "-D" instead of "-d"
 $ gitclean --force
 ```
 
-**Interactive**
+### Interactive
 
 Present all ": gone" branches in a checkbox list, allowing user to opt-in to deletions.
 
@@ -35,8 +35,18 @@ Present all ": gone" branches in a checkbox list, allowing user to opt-in to del
 $ gitclean -i
 # or
 $ gitclean --interactive
-# with force:
+# with force
 $ gitclean -if
 # or
 $ gitclean --interactive --force
+```
+
+### Directory
+
+By default, `gitclean` will execute all commands in the **current directory** (`.`), however, you can pass a path to another git repository after any/all other flags.
+
+```bash
+$ gitclean ../some/other/repo
+# with flags
+$ gitclean -if ../some/other/repo
 ```
