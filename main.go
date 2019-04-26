@@ -38,7 +38,12 @@ func main() {
 		return
 	}
 
-	git := gUtils.Git{}
+	directory := flag.Arg(0) // first trailing argument after flags (if any)
+	if directory == "" {
+		directory = "."
+	}
+
+	git := gUtils.NewExecutor(directory)
 
 	goneBranches := []string{}
 	branchesToDelete := []string{}

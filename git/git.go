@@ -19,6 +19,13 @@ type Git struct {
 
 	DeletedBranches      []string
 	BranchDeletionErrors []branchDeletionError
+
+	directory string
+}
+
+// NewExecutor Constructor for git executor
+func NewExecutor(directory string) Git {
+	return Git{directory: directory}
 }
 
 func reportProcess(name string) {
@@ -26,7 +33,8 @@ func reportProcess(name string) {
 }
 
 func (g *Git) execGitCommand(args []string) {
-	cmd := exec.Command("git", args...)
+	argsWithDirectory := append([]string{"-C", g.directory}, args...)
+	cmd := exec.Command("git", argsWithDirectory...)
 	var out bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &out
