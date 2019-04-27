@@ -8,6 +8,8 @@ import (
 // build info injected by gitclean
 var version = "development snapshot"
 
+ksjdhfkshfk
+
 // flags
 var (
 	force        bool
