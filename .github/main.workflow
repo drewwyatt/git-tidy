@@ -3,6 +3,11 @@ workflow "Release" {
   resolves = ["goreleaser"]
 }
 
+workflow "Build" {
+  on = "pull_request"
+  resolves = ["build"]
+}
+
 action "is-tag" {
   uses = "actions/bin/filter@master"
   args = "tag"
@@ -12,12 +17,14 @@ action "goreleaser" {
   uses = "docker://goreleaser/goreleaser"
   secrets = [
     "GITHUB_TOKEN",
-
-    # either GITHUB_TOKEN or GORELEASER_GITHUB_TOKEN is required
     "DOCKER_USERNAME",
-
     "DOCKER_PASSWORD",
   ]
   args = "release"
   needs = ["is-tag"]
+}
+
+action "build" {
+  uses = "docker://golang:1.11"
+  args = "go build"
 }
