@@ -2,7 +2,7 @@
 
 [![release](https://img.shields.io/github/release-pre/drewwyatt/gitclean.svg?style=for-the-badge)](https://github.com/drewwyatt/gitclean/releases)
 
-Delete local git branches (in the current directory) that have a remote tracking branch that is `: gone`.
+Delete local git branches that have a remote tracking branch that is `: gone`.
 
 ## Installation
 
