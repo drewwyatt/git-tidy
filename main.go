@@ -19,9 +19,9 @@ func main() {
 	flag.Parse()
 	directory := flag.Arg(0) // first trailing argument after flags (if any)
 
-	intent := commands.NewIntent(printVersion)
+	info := commands.NewIntentInfo(printVersion)
 
-	switch i := intent.Is(); i {
+	switch i := info.Intent(); i {
 	case commands.VersionIntent:
 		commands.Version(version)
 		return
