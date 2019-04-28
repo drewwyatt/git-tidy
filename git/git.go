@@ -3,7 +3,6 @@ package git
 import (
 	"bytes"
 	"fmt"
-	"os/exec"
 )
 
 type branchDeletionError struct {
@@ -21,11 +20,12 @@ type Git struct {
 	BranchDeletionErrors []branchDeletionError
 
 	directory string
+	exec      Executor
 }
 
-// NewExecutor Constructor for git executor
-func NewExecutor(directory string) Git {
-	return Git{directory: directory}
+// NewGit Constructor for git executor
+func NewGit(directory string, exec Executor) Git {
+	return Git{directory: directory, exec: exec}
 }
 
 func reportProcess(name string) {
@@ -34,14 +34,12 @@ func reportProcess(name string) {
 
 func (g *Git) execGitCommand(args []string) {
 	argsWithDirectory := append([]string{"-C", g.directory}, args...)
-	cmd := exec.Command("git", argsWithDirectory...)
-	var out bytes.Buffer
+	cmd := g.exec.Command("git", argsWithDirectory...)
+	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err := cmd.Run(&stdout, &stderr)
 
-	g.setOutputAndError(out, err, stderr)
+	g.setOutputAndError(stdout, err, stderr)
 }
 
 func (g *Git) setOutputAndError(output bytes.Buffer, error error, errMsg bytes.Buffer) {
