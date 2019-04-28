@@ -63,7 +63,6 @@ func (g *Git) Delete(branch string, force bool) *Git {
 	deleteArg := getDeleteArg(force)
 	reportProcess(fmt.Sprintf("git branch %s %s", deleteArg, branch))
 	args := []string{"branch", deleteArg, branch}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	if g.Error != nil {
 		errs := append(g.BranchDeletionErrors, branchDeletionError{branch, g.ErrorMsg})
@@ -77,7 +76,6 @@ func (g *Git) Delete(branch string, force bool) *Git {
 // Fetch executes git fetch command
 func (g *Git) Fetch() *Git {
 	reportProcess("git fetch")
-	// g.setOutputAndError(exec.Command(cmd, "fetch").Output())
 	g.execGitCommand([]string{"fetch"})
 	return g
 }
@@ -86,7 +84,6 @@ func (g *Git) Fetch() *Git {
 func (g *Git) ListRemoteBranches() *Git {
 	reportProcess("git branch -vv")
 	args := []string{"branch", "-vv"}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	return g
 }
@@ -95,7 +92,6 @@ func (g *Git) ListRemoteBranches() *Git {
 func (g *Git) Prune() *Git {
 	reportProcess("git remote prune origin")
 	args := []string{"remote", "prune", "origin"}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	return g
 }
