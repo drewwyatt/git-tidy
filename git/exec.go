@@ -5,11 +5,13 @@ import (
 	"os/exec"
 )
 
+//go:generate moq -out executor_moq_test.go . Executor
 // Executor - exposes Command function
 type Executor interface {
 	Command(name string, args ...string) CmdRunner
 }
 
+//go:generate moq -out cmd_runnerr_moq_test.go . CmdRunner
 // CmdRunner created by Command(), exposes Run function
 type CmdRunner interface {
 	Run(stdOut *bytes.Buffer, stdErr *bytes.Buffer) error
