@@ -7,6 +7,14 @@ import (
 	g "github.com/drewwyatt/gitclean/git"
 )
 
+var errorString string = "This is an error"
+
+type TestError struct{}
+
+func (e TestError) Error() string {
+	return errorString
+}
+
 func TestDelete(t *testing.T) {
 	var cmdName string
 	var deletedBranch string
@@ -41,11 +49,52 @@ func TestDelete(t *testing.T) {
 		t.Errorf("unexpected deletion arg: %s (expected '-d')", deletionArg)
 	}
 
+	if len(git.DeletedBranches) != 1 {
+		t.Errorf("unexpected number of deleted branches: %d", len(git.DeletedBranches))
+	}
+
+	if git.DeletedBranches[0] != branchName {
+		t.Errorf("Unexpected branch name: %s", git.DeletedBranches[0])
+	}
+
 	git.Delete(branchName, true)
 	if deletionArg != "-D" {
-		t.Errorf("unexpected deletion arg: %s (expected '-D)", deletionArg)
+		t.Errorf("unexpected deletion arg: %s (expected '-D')", deletionArg)
+	}
+
+	if len(git.DeletedBranches) != 2 {
+		t.Errorf("unexpected number of deleted branches: %d", len(git.DeletedBranches))
 	}
 }
+
+func TestDeleteError(t *testing.T) {
+	mockedExecutor := &g.ExecutorMock{
+		CommandFunc: func(name string, otherArgs ...string) g.CmdRunner {
+			return &g.CmdRunnerMock{
+				RunFunc: func(o *bytes.Buffer, e *bytes.Buffer) error {
+					return TestError{}
+				},
+			}
+		},
+	}
+
+	git := g.NewGit(".", mockedExecutor)
+	branchName := "hello"
+	git.Delete(branchName, false)
+
+	if git.Error.Error() != errorString {
+		t.Errorf("Unexpected error message: %s", git.Error)
+	}
+
+	if len(git.BranchDeletionErrors) != 1 {
+		t.Errorf("Unexpected error count: %d", len(git.BranchDeletionErrors))
+	}
+
+	if git.BranchDeletionErrors[0].Branch != branchName {
+		t.Errorf("Unexpected branch name: %s", git.BranchDeletionErrors[0].Branch)
+	}
+}
+
 func TestFetch(t *testing.T) {
 	var cmdName string
 	mockedExecutor := &g.ExecutorMock{
