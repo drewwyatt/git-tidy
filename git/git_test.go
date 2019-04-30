@@ -2,6 +2,7 @@ package git_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	g "github.com/drewwyatt/gitclean/git"
@@ -144,5 +145,28 @@ func TestListRemoteBranches(t *testing.T) {
 
 	if arg != "-vv" {
 		t.Errorf("unexpected arg: %s", arg)
+	}
+}
+
+func TestPrune(t *testing.T) {
+	var command string
+	mockedExecutor := &g.ExecutorMock{
+		CommandFunc: func(name string, otherArgs ...string) g.CmdRunner {
+			command = strings.Join(otherArgs[2:], " ")
+			return &g.CmdRunnerMock{
+				RunFunc: func(o *bytes.Buffer, e *bytes.Buffer) error {
+					return nil
+				},
+			}
+		},
+	}
+	git := g.NewGit(".", mockedExecutor)
+	git.Prune()
+	callsToCommand := len(mockedExecutor.CommandCalls())
+	if callsToCommand != 1 {
+		t.Errorf("cmd was called %d times", callsToCommand)
+	}
+	if command != "remote prune origin" {
+		t.Errorf("unexpected command: %s", command)
 	}
 }
