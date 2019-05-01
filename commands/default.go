@@ -16,7 +16,7 @@ func Default(directory string, interactive bool, force bool) {
 		directory = "."
 	}
 
-	git := gUtils.NewExecutor(directory)
+	git := gUtils.NewGit(directory, gUtils.NewExecutorWithExec())
 
 	goneBranches := []string{}
 	branchesToDelete := []string{}

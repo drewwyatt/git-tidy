@@ -3,7 +3,6 @@ package git
 import (
 	"bytes"
 	"fmt"
-	"os/exec"
 )
 
 type branchDeletionError struct {
@@ -21,11 +20,12 @@ type Git struct {
 	BranchDeletionErrors []branchDeletionError
 
 	directory string
+	exec      Executor
 }
 
-// NewExecutor Constructor for git executor
-func NewExecutor(directory string) Git {
-	return Git{directory: directory}
+// NewGit Constructor for git executor
+func NewGit(directory string, exec Executor) Git {
+	return Git{directory: directory, exec: exec}
 }
 
 func reportProcess(name string) {
@@ -34,14 +34,12 @@ func reportProcess(name string) {
 
 func (g *Git) execGitCommand(args []string) {
 	argsWithDirectory := append([]string{"-C", g.directory}, args...)
-	cmd := exec.Command("git", argsWithDirectory...)
-	var out bytes.Buffer
+	cmd := g.exec.Command("git", argsWithDirectory...)
+	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err := cmd.Run(&stdout, &stderr)
 
-	g.setOutputAndError(out, err, stderr)
+	g.setOutputAndError(stdout, err, stderr)
 }
 
 func (g *Git) setOutputAndError(output bytes.Buffer, error error, errMsg bytes.Buffer) {
@@ -63,7 +61,6 @@ func (g *Git) Delete(branch string, force bool) *Git {
 	deleteArg := getDeleteArg(force)
 	reportProcess(fmt.Sprintf("git branch %s %s", deleteArg, branch))
 	args := []string{"branch", deleteArg, branch}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	if g.Error != nil {
 		errs := append(g.BranchDeletionErrors, branchDeletionError{branch, g.ErrorMsg})
@@ -77,7 +74,6 @@ func (g *Git) Delete(branch string, force bool) *Git {
 // Fetch executes git fetch command
 func (g *Git) Fetch() *Git {
 	reportProcess("git fetch")
-	// g.setOutputAndError(exec.Command(cmd, "fetch").Output())
 	g.execGitCommand([]string{"fetch"})
 	return g
 }
@@ -86,7 +82,6 @@ func (g *Git) Fetch() *Git {
 func (g *Git) ListRemoteBranches() *Git {
 	reportProcess("git branch -vv")
 	args := []string{"branch", "-vv"}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	return g
 }
@@ -95,7 +90,6 @@ func (g *Git) ListRemoteBranches() *Git {
 func (g *Git) Prune() *Git {
 	reportProcess("git remote prune origin")
 	args := []string{"remote", "prune", "origin"}
-	// g.setOutputAndError(exec.Command(cmd, args...).Output())
 	g.execGitCommand(args)
 	return g
 }
