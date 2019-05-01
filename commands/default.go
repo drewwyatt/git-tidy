@@ -2,10 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"gopkg.in/AlecAivazis/survey.v1"
 	"regexp"
 
-	gUtils "github.com/drewwyatt/gitclean/git"
+	"gopkg.in/AlecAivazis/survey.v1"
+
+	gUtils "github.com/drewwyatt/git-tidy/git"
 )
 
 var goneBranch = regexp.MustCompile(`(?m)^(?:\*| ) ([^\s]+)\s+[a-z0-9]+ \[[^:\n]+: gone\].*$`)

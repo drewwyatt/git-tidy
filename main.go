@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/drewwyatt/gitclean/commands"
+	"github.com/drewwyatt/git-tidy/commands"
 	flag "github.com/ogier/pflag"
 )
 
