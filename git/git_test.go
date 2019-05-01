@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	g "github.com/drewwyatt/gitclean/git"
+	g "github.com/drewwyatt/git-tidy/git"
 )
 
 var errorString string = "This is an error"
