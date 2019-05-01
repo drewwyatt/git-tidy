@@ -1,6 +1,6 @@
-# 🧽 Gitclean
+# 🗑 git-tidy
 
-[![release](https://img.shields.io/github/release-pre/drewwyatt/gitclean.svg?style=for-the-badge)](https://github.com/drewwyatt/gitclean/releases)
+[![release](https://img.shields.io/github/release-pre/drewwyatt/git-tidy.svg?style=for-the-badge)](https://github.com/drewwyatt/git-tidy/releases)
 
 Delete local git branches that have a remote tracking branch that is `: gone`.
 
@@ -10,21 +10,21 @@ Delete local git branches that have a remote tracking branch that is `: gone`.
 
 ```bash
 $ brew tap drewwyatt/tap
-$ brew install gitclean
+$ brew install git-tidy
 ```
 
 ## Usage
 
 ```bash
-$ gitclean # executes "git branch -d" on ": gone" branches
+$ git tidy # executes "git branch -d" on ": gone" branches
 ```
 
 ### With force delete
 
 ```bash
-$ gitclean -f # same as above, but with "-D" instead of "-d"
+$ git tidy -f # same as above, but with "-D" instead of "-d"
 # or
-$ gitclean --force
+$ git tidy --force
 ```
 
 ### Interactive
@@ -32,21 +32,21 @@ $ gitclean --force
 Present all ": gone" branches in a checkbox list, allowing user to opt-in to deletions.
 
 ```bash
-$ gitclean -i
+$ git tidy -i
 # or
-$ gitclean --interactive
+$ git tidy --interactive
 # with force
-$ gitclean -if
+$ git tidy -if
 # or
-$ gitclean --interactive --force
+$ git tidy --interactive --force
 ```
 
-### Directory
+### Path
 
-By default, `gitclean` will execute all commands in the **current directory** (`.`), however, you can pass a path to another git repository after any/all other flags.
+By default, `tidy` will execute all commands in the **current directory** (`.`), however, you can pass a path to another git repository after any/all other flags.
 
 ```bash
-$ gitclean ../some/other/repo
+$ git tidy ../some/other/repo
 # with flags
-$ gitclean -if ../some/other/repo
+$ git tidy -if ../some/other/repo
 ```
