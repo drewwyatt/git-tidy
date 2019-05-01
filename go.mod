@@ -1,4 +1,4 @@
-module github.com/drewwyatt/gitclean
+module github.com/drewwyatt/git-tidy
 
 require (
 	github.com/ogier/pflag v0.0.1
