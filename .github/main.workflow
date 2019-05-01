@@ -3,9 +3,9 @@ workflow "Release" {
   resolves = ["goreleaser"]
 }
 
-workflow "Build" {
+workflow "PR" {
   on = "pull_request"
-  resolves = ["build"]
+  resolves = ["build", "test", "verify"]
 }
 
 action "is-tag" {
@@ -27,4 +27,14 @@ action "goreleaser" {
 action "build" {
   uses = "docker://golang:1.11"
   args = "go build"
+}
+
+action "test" {
+  uses = "docker://golang:1.11"
+  args = "go test ./..."
+}
+
+action "verify" {
+  uses = "docker://golang:1.11"
+  args = "go mod verify"
 }
