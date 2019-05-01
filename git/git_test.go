@@ -16,6 +16,34 @@ func (e TestError) Error() string {
 	return errorString
 }
 
+func TestPath(t *testing.T) {
+	var flag string
+	var path string
+	mockedExecutor := &g.ExecutorMock{
+		CommandFunc: func(name string, otherArgs ...string) g.CmdRunner {
+			flag = otherArgs[0]
+			path = otherArgs[1]
+			return &g.CmdRunnerMock{
+				RunFunc: func(o *bytes.Buffer, e *bytes.Buffer) error {
+					return nil
+				},
+			}
+		},
+	}
+
+	expectedPath := "../path/to/foo"
+	git := g.NewGit(expectedPath, mockedExecutor)
+	git.Fetch()
+
+	if flag != "-C" {
+		t.Errorf("unexpected path flag: %s (expected '-C')", flag)
+	}
+
+	if path != expectedPath {
+		t.Errorf("unexpected path: %s (expected '%s')", path, expectedPath)
+	}
+}
+
 func TestDelete(t *testing.T) {
 	var cmdName string
 	var deletedBranch string
