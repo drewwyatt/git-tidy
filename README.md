@@ -1,8 +1,8 @@
-# 🗑 git-tidy
-
-[![release](https://img.shields.io/github/release-pre/drewwyatt/git-tidy.svg?style=for-the-badge)](https://github.com/drewwyatt/git-tidy/releases)
+# 🗑 git-tidy &middot; ![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg) ![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)
 
 Delete local git branches that have a remote tracking branch that is `: gone`.
+
+[![asciicast](https://asciinema.org/a/1HgPIGWL1U24nR998vJEvPOHN.svg)](https://asciinema.org/a/1HgPIGWL1U24nR998vJEvPOHN)
 
 ## Installation
 
