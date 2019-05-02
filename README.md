@@ -1,4 +1,4 @@
-# 🗑 git-tidy &middot; ![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg) ![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)
+# 🗑 git-tidy &middot; [![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/releases)
 
 Delete local git branches that have a remote tracking branch that is `: gone`.
 
