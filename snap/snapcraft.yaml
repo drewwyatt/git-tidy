@@ -1,0 +1,18 @@
+name: git-tidy
+version: 1.0.0
+summary: Tidy up local git branches
+description: |
+  Delete local git branches that have a
+  remote tracking branch that is "gone".
+
+confinement: strict
+base: core18
+
+parts:
+  git-tidy:
+    plugin: dump
+    source: https://github.com/drewwyatt/git-tidy/releases/download/$SNAPCRAFT_PROJECT_VERSION/git-tidy_$SNAPCRAFT_PROJECT_VERSION_Linux_x86_64.tar.gz
+
+apps:
+  git-tidy:
+    command: git-tidy
