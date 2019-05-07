@@ -19,6 +19,12 @@ $ brew install git-tidy
 $ sudo snap install git-tidy
 ```
 
+### Go
+
+```#!bash
+$ go get -u github.com/drewwyatt/git-tidy
+```
+
 ## Usage
 
 ```bash
