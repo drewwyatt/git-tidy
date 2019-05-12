@@ -36,7 +36,7 @@ action "test" {
 
 action "coverage" {
   uses = "docker://debian:9.5-slim"
-  # needs = ["test"]
+  needs = ["test"]
   args = "./.github/upload-coverage.sh"
   secrets = ["CODECOV_TOKEN"]
 }
