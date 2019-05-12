@@ -1,4 +1,4 @@
-# 🗑 git-tidy &middot; [![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/releases) [![Snap Status](https://build.snapcraft.io/badge/drewwyatt/git-tidy.svg)](https://build.snapcraft.io/user/drewwyatt/git-tidy)
+# 🗑 git-tidy &middot; [![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/releases) [![codecov](https://codecov.io/gh/drewwyatt/git-tidy/branch/master/graph/badge.svg)](https://codecov.io/gh/drewwyatt/git-tidy)
 
 Delete local git branches that have a remote tracking branch that is `: gone`.
 
@@ -13,7 +13,7 @@ $ brew tap drewwyatt/tap
 $ brew install git-tidy
 ```
 
-### Snapcraft
+### Snapcraft &middot; [![Snap Status](https://build.snapcraft.io/badge/drewwyatt/git-tidy.svg)](https://build.snapcraft.io/user/drewwyatt/git-tidy)
 
 ```bash
 $ sudo snap install git-tidy

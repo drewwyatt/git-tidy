@@ -5,7 +5,7 @@ workflow "Release" {
 
 workflow "PR" {
   on = "pull_request"
-  resolves = ["build", "test", "verify"]
+  resolves = ["build", "test", "coverage", "verify"]
 }
 
 action "is-tag" {
@@ -31,7 +31,14 @@ action "build" {
 
 action "test" {
   uses = "docker://golang:1.11"
-  args = "go test ./..."
+  args = "go test -race -coverprofile=coverage.txt -covermode=atomic ./..."
+}
+
+action "coverage" {
+  uses = "docker://debian:9.5-slim"
+  needs = ["test"]
+  args = "./.github/upload-coverage.sh"
+  secrets = ["CODECOV_TOKEN"]
 }
 
 action "verify" {

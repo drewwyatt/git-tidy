@@ -2,3 +2,4 @@ dist/
 gitclean
 git-tidy
 *.snap
+coverage.txt
