@@ -2,22 +2,13 @@ package git
 
 import (
 	"bytes"
-	"fmt"
 )
-
-type branchDeletionError struct {
-	Branch string
-	Msg    string
-}
 
 // Git Namespace for git command execution
 type Git struct {
 	Output   string
 	Error    error
 	ErrorMsg string
-
-	DeletedBranches      []string
-	BranchDeletionErrors []branchDeletionError
 
 	directory string
 	exec      Executor
@@ -26,10 +17,6 @@ type Git struct {
 // NewGit Constructor for git executor
 func NewGit(directory string, exec Executor) Git {
 	return Git{directory: directory, exec: exec}
-}
-
-func reportProcess(name string) {
-	fmt.Printf("Running '%s'...\n", name)
 }
 
 func (g *Git) execGitCommand(args []string) {
@@ -57,39 +44,52 @@ func getDeleteArg(force bool) string {
 }
 
 // Delete executes git branch -d/D on a given branch
-func (g *Git) Delete(branch string, force bool) *Git {
+func (g *Git) Delete(branch string, force bool) error {
 	deleteArg := getDeleteArg(force)
-	reportProcess(fmt.Sprintf("git branch %s %s", deleteArg, branch))
 	args := []string{"branch", deleteArg, branch}
 	g.execGitCommand(args)
-	if g.Error != nil {
-		errs := append(g.BranchDeletionErrors, branchDeletionError{branch, g.ErrorMsg})
-		g.BranchDeletionErrors = errs
-	} else {
-		g.DeletedBranches = append(g.DeletedBranches, branch)
-	}
-	return g
+	return g.gitErrorIfSet()
 }
 
 // Fetch executes git fetch command
-func (g *Git) Fetch() *Git {
-	reportProcess("git fetch")
+func (g *Git) Fetch() error {
 	g.execGitCommand([]string{"fetch"})
-	return g
+	return g.gitErrorIfSet()
 }
 
 // ListRemoteBranches executes git branch -vv
-func (g *Git) ListRemoteBranches() *Git {
-	reportProcess("git branch -vv")
+func (g *Git) ListRemoteBranches() error {
 	args := []string{"branch", "-vv"}
 	g.execGitCommand(args)
-	return g
+	return g.gitErrorIfSet()
+}
+
+type GitError struct {
+	msg string
+}
+
+func (g *Git) gitErrorIfSet() error {
+	var msg string
+	if g.ErrorMsg != "" {
+		msg = g.ErrorMsg
+	} else if g.Error != nil {
+		msg = g.Error.Error()
+	}
+
+	if msg != "" {
+		return GitError{msg: msg}
+	}
+
+	return nil
+}
+
+func (e GitError) Error() string {
+	return e.msg
 }
 
 // Prune executes git remote prune origin
-func (g *Git) Prune() *Git {
-	reportProcess("git remote prune origin")
+func (g *Git) Prune() error {
 	args := []string{"remote", "prune", "origin"}
 	g.execGitCommand(args)
-	return g
+	return g.gitErrorIfSet()
 }
