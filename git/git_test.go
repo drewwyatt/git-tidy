@@ -78,21 +78,9 @@ func TestDelete(t *testing.T) {
 		t.Errorf("unexpected deletion arg: %s (expected '-d')", deletionArg)
 	}
 
-	if len(git.DeletedBranches) != 1 {
-		t.Errorf("unexpected number of deleted branches: %d", len(git.DeletedBranches))
-	}
-
-	if git.DeletedBranches[0] != branchName {
-		t.Errorf("Unexpected branch name: %s", git.DeletedBranches[0])
-	}
-
 	git.Delete(branchName, true)
 	if deletionArg != "-D" {
 		t.Errorf("unexpected deletion arg: %s (expected '-D')", deletionArg)
-	}
-
-	if len(git.DeletedBranches) != 2 {
-		t.Errorf("unexpected number of deleted branches: %d", len(git.DeletedBranches))
 	}
 }
 
@@ -113,14 +101,6 @@ func TestDeleteError(t *testing.T) {
 
 	if git.Error.Error() != errorString {
 		t.Errorf("Unexpected error message: %s", git.Error)
-	}
-
-	if len(git.BranchDeletionErrors) != 1 {
-		t.Errorf("Unexpected error count: %d", len(git.BranchDeletionErrors))
-	}
-
-	if git.BranchDeletionErrors[0].Branch != branchName {
-		t.Errorf("Unexpected branch name: %s", git.BranchDeletionErrors[0].Branch)
 	}
 }
 
