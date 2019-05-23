@@ -35,3 +35,5 @@ golang.org/x/tools v0.0.0-20190428024724-550556f78a90 h1:oGQGZoUHCvTWJLWXu4Qpp6u
 golang.org/x/tools v0.0.0-20190428024724-550556f78a90/go.mod h1:RgjU9mgBXZiqYHBnxXauZ1Gv1EHHAz9KjViQ78xBX0Q=
 gopkg.in/AlecAivazis/survey.v1 v1.8.3 h1:uf8V0NkfqJkwWF9mWziv/xkpVc31xgwftG7mXU7udHk=
 gopkg.in/AlecAivazis/survey.v1 v1.8.3/go.mod h1:iBNOmqKz/NUbZx3bA+4hAGLRC7fSK7tgtVDT4tB22XA=
+gopkg.in/AlecAivazis/survey.v1 v1.8.4 h1:10xXXN3wgIhPheb5NI58zFgZv32Ana7P3Tl4shW+0Qc=
+gopkg.in/AlecAivazis/survey.v1 v1.8.4/go.mod h1:iBNOmqKz/NUbZx3bA+4hAGLRC7fSK7tgtVDT4tB22XA=
