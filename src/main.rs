@@ -1,3 +1,4 @@
+use std::process::Command;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
@@ -29,10 +30,36 @@ struct Cli {
   path: std::path::PathBuf,
 }
 
-fn main() {
+#[derive(Debug)]
+pub enum GitError {
+  ExecError,
+  ParseError,
+}
+
+impl From<std::io::Error> for GitError {
+  fn from(_: std::io::Error) -> Self {
+    Self::ExecError
+  }
+}
+
+impl From<std::string::FromUtf8Error> for GitError {
+  fn from(_: std::string::FromUtf8Error) -> Self {
+    Self::ParseError
+  }
+}
+
+fn main() -> Result<(), GitError> {
   let args = Cli::from_args();
 
   println!("force: {}", args.force);
   println!("interactive: {}", args.interactive);
   println!("path: {:?}", args.path.into_os_string());
+
+  let output = Command::new("git").arg("branch").arg("-vv").output()?;
+
+  String::from_utf8(output.stdout)?
+    .lines()
+    .for_each(|x| println!("{:?}", x));
+
+  Ok(())
 }
