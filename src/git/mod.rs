@@ -1,7 +1,6 @@
-pub mod error;
+pub mod models;
 
-use error::GitError;
-use std::process::Command;
+use models::{GitError, GitExec};
 
 pub struct Git {
   path: std::path::PathBuf,
@@ -18,12 +17,18 @@ impl Git {
     }
   }
 
-  pub fn list_branches(self: Self) -> Result<Self, GitError> {
-    let output = Command::new("git").arg("branch").arg("-vv").output()?;
-
-    String::from_utf8(output.stdout)?
-      .lines()
-      .for_each(|x| println!("{:?}", x));
-    Ok(self)
+  pub fn fetch(self: Self) -> Result<Self, GitError> {
+    println!("fetching....");
+    GitExec::fetch().map(|_| self)
   }
+
+  // pub fn list_branches(self: Self) -> Result<Self, GitError> {
+  //   println!("listing branches...");
+  //   let output = Command::new("git").arg("branch").arg("-vv").output()?;
+
+  //   String::from_utf8(output.stdout)?
+  //     .lines()
+  //     .for_each(|x| println!("{:?}", x));
+  //   Ok(self)
+  // }
 }

@@ -1,6 +1,6 @@
 mod git;
 
-use git::error::GitError;
+use git::models::GitError;
 use git::Git;
 use structopt::StructOpt;
 
@@ -41,10 +41,5 @@ fn main() -> Result<(), GitError> {
   // println!("path: {:?}", args.path.into_os_string());
 
   let git = Git::from(args.path, args.force, args.interactive);
-  let result = git.list_branches();
-  if result.is_err() {
-    return Err(GitError::ExecError);
-  }
-
-  Ok(())
+  git.fetch().map(|_| ())
 }
