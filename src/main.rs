@@ -40,6 +40,8 @@ fn main() -> Result<(), GitError> {
   println!("interactive: {}", args.interactive);
   // println!("path: {:?}", args.path.into_os_string());
 
-  let git = Git::from(args.path, args.force, args.interactive);
-  git.fetch().map(|_| ())
+  Git::from(args.path, args.force, args.interactive)
+    .fetch()?
+    .list_branches()
+    .map(|_| ())
 }

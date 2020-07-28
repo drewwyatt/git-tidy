@@ -22,6 +22,17 @@ impl Git {
     GitExec::fetch().map(|_| self)
   }
 
+  pub fn list_branches(self: Self) -> Result<Self, GitError> {
+    println!("listing branches...");
+    let output = GitExec::list_branches();
+    if output.is_ok() {
+      println!("output ok: {:?}", output.unwrap());
+      return Ok(self);
+    }
+
+    return Err(output.err().unwrap());
+  }
+
   // pub fn list_branches(self: Self) -> Result<Self, GitError> {
   //   println!("listing branches...");
   //   let output = Command::new("git").arg("branch").arg("-vv").output()?;
