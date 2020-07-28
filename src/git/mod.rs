@@ -32,14 +32,4 @@ impl Git {
 
     return Err(output.err().unwrap());
   }
-
-  // pub fn list_branches(self: Self) -> Result<Self, GitError> {
-  //   println!("listing branches...");
-  //   let output = Command::new("git").arg("branch").arg("-vv").output()?;
-
-  //   String::from_utf8(output.stdout)?
-  //     .lines()
-  //     .for_each(|x| println!("{:?}", x));
-  //   Ok(self)
-  // }
 }
