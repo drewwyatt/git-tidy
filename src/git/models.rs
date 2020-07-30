@@ -40,13 +40,10 @@ impl GitExec {
         Err(GitError::from(output))
     }
 
-    pub fn list_branches() -> Result<Vec<String>, GitError> {
+    pub fn list_branches() -> Result<String, GitError> {
         let output = Command::new("git").arg("branch").arg("-vv").output()?;
         if output.status.success() {
-            return Ok(String::from_utf8(output.stdout)?
-                .lines()
-                .map(String::from)
-                .collect::<Vec<String>>());
+            return Ok(String::from_utf8(output.stdout)?);
         }
 
         Err(GitError::from(output))
