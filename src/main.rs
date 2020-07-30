@@ -38,10 +38,10 @@ fn main() -> Result<(), GitError> {
 
   println!("force: {}", args.force);
   println!("interactive: {}", args.interactive);
-  // println!("path: {:?}", args.path.into_os_string());
 
   Git::from(args.path, args.force, args.interactive)
     .fetch()?
-    .list_branches()
-    .map(|_| ())
+    .list_branches()?;
+
+  Ok(())
 }

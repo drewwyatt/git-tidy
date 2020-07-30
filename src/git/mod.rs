@@ -24,12 +24,9 @@ impl Git {
 
   pub fn list_branches(self: Self) -> Result<Self, GitError> {
     println!("listing branches...");
-    let output = GitExec::list_branches();
-    if output.is_ok() {
-      println!("output ok: {:?}", output.unwrap());
-      return Ok(self);
-    }
+    let output = GitExec::list_branches()?;
+    println!("output ok: {:?}", output);
 
-    return Err(output.err().unwrap());
+    Ok(self)
   }
 }
