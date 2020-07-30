@@ -41,6 +41,7 @@ fn main() -> Result<(), GitError> {
 
   let branches = Git::from(args.path, args.force, args.interactive)
     .fetch()?
+    .prune()?
     .list_branches()?;
 
   println!("branches: {:?}", branches);

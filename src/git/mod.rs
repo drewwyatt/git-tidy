@@ -22,13 +22,16 @@ impl Git {
   }
 
   pub fn fetch(self) -> Result<Self, GitError> {
-    println!("fetching....");
     GitExec::fetch()?;
     Ok(self)
   }
 
+  pub fn prune(self) -> Result<Self, GitError> {
+    GitExec::prune()?;
+    Ok(self)
+  }
+
   pub fn list_branches(self) -> Result<Vec<String>, GitError> {
-    println!("listing branches...");
     let output = GitExec::list_branches()?;
 
     Ok(
