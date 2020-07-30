@@ -39,9 +39,11 @@ fn main() -> Result<(), GitError> {
   println!("force: {}", args.force);
   println!("interactive: {}", args.interactive);
 
-  Git::from(args.path, args.force, args.interactive)
+  let branches = Git::from(args.path, args.force, args.interactive)
     .fetch()?
     .list_branches()?;
+
+  println!("branches: {:?}", branches);
 
   Ok(())
 }

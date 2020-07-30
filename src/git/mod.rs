@@ -7,7 +7,6 @@ pub struct Git {
   path: std::path::PathBuf,
   force: bool,
   interactive: bool,
-
   gone_branch_regex: Regex,
 }
 
@@ -22,20 +21,22 @@ impl Git {
     }
   }
 
-  pub fn fetch(self: Self) -> Result<Self, GitError> {
+  pub fn fetch(self) -> Result<Self, GitError> {
     println!("fetching....");
     GitExec::fetch()?;
     Ok(self)
   }
 
-  pub fn list_branches(self: Self) -> Result<Self, GitError> {
+  pub fn list_branches(self) -> Result<Vec<String>, GitError> {
     println!("listing branches...");
     let output = GitExec::list_branches()?;
-    println!("output ok: {:?}", output);
-    for cap in self.gone_branch_regex.captures_iter(&output) {
-      println!("branch: {:?}", &cap[0]);
-    }
 
-    Ok(self)
+    Ok(
+      self
+        .gone_branch_regex
+        .captures_iter(&output)
+        .map(|cap| String::from(&cap[1]))
+        .collect::<Vec<String>>(),
+    )
   }
 }
