@@ -32,7 +32,6 @@ pub struct GitExec {}
 
 impl GitExec {
     pub fn fetch() -> Result<(), GitError> {
-        println!("running 'git fetch'...");
         let output = Command::new("git").arg("fetch").output()?;
         if output.status.success() {
             return Ok(());
@@ -42,7 +41,6 @@ impl GitExec {
     }
 
     pub fn prune() -> Result<(), GitError> {
-        println!("running 'git remote prune origin'...");
         let output = Command::new("git")
             .arg("remote")
             .arg("prune")
@@ -56,7 +54,6 @@ impl GitExec {
     }
 
     pub fn list_branches() -> Result<String, GitError> {
-        println!("running 'git branch -vv'...");
         let output = Command::new("git").arg("branch").arg("-vv").output()?;
         if output.status.success() {
             return Ok(String::from_utf8(output.stdout)?);

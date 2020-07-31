@@ -1,8 +1,9 @@
 mod git;
 
+use structopt::StructOpt;
+
 use git::models::GitError;
 use git::Git;
-use structopt::StructOpt;
 
 #[derive(StructOpt)]
 #[structopt(
@@ -36,15 +37,10 @@ struct Cli {
 fn main() -> Result<(), GitError> {
   let args = Cli::from_args();
 
-  println!("force: {}", args.force);
-  println!("interactive: {}", args.interactive);
-
-  let branches = Git::from(args.path, args.force, args.interactive)
+  Git::from(args.path, args.force, args.interactive)
     .fetch()?
     .prune()?
     .list_branches()?;
-
-  println!("branches: {:?}", branches);
 
   Ok(())
 }
