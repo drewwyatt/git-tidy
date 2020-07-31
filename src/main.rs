@@ -37,10 +37,10 @@ struct Cli {
 fn main() -> Result<(), GitError> {
   let args = Cli::from_args();
 
-  Git::from(args.path, args.force, args.interactive)
-    .fetch()?
-    .prune()?
-    .list_branches()?;
+  let mut git = Git::from(args.path, args.force, args.interactive);
+  let out = git.fetch().prune().list_branches().output()?;
+
+  println!("gone branches: {:?}", git.to_branch_names(out));
 
   Ok(())
 }
