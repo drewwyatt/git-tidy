@@ -1,5 +1,6 @@
 mod git;
 
+use indicatif::ProgressBar;
 use structopt::StructOpt;
 
 use git::models::GitError;
@@ -36,11 +37,17 @@ struct Cli {
 
 fn main() -> Result<(), GitError> {
   let args = Cli::from_args();
+  let spinner = ProgressBar::new_spinner();
+  spinner.set_message("tidying up...");
+  spinner.enable_steady_tick(160);
 
-  let mut git = Git::from(args.path, args.force, args.interactive);
-  let out = git.fetch().prune().list_branches().output()?;
+  let out = Git::from(args.path, |m| spinner.set_message(m))
+    .fetch()?
+    .prune()?
+    .list_branches()?
+    .branch_names()?;
 
-  println!("gone branches: {:?}", git.to_branch_names(out));
+  spinner.finish_with_message(&format!("gone branches: {:?}", out));
 
   Ok(())
 }
