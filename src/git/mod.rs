@@ -29,6 +29,17 @@ where
     }
   }
 
+  pub fn delete(&mut self, force: bool, branch_name: String) -> Result<&mut Self, GitError> {
+    // TODO: figure out how to prevent getting the delete arg in 2 places
+    let delete_arg = if force { "-D" } else { "-d" };
+    self.report_progress(&format!(
+      "running 'git branch {} {}'",
+      delete_arg, branch_name
+    ));
+    self.output = Some(GitExec::delete(force, branch_name)?);
+    Ok(self)
+  }
+
   pub fn fetch(&mut self) -> Result<&mut Self, GitError> {
     self.report_progress("running 'git fetch'...");
     self.output = Some(GitExec::fetch()?);

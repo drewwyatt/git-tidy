@@ -31,6 +31,21 @@ use std::process::Command;
 pub struct GitExec {}
 
 impl GitExec {
+    pub fn delete(force: bool, branch_name: String) -> Result<String, GitError> {
+        let delete_arg = if force { "-D" } else { "-d" };
+        let output = Command::new("git")
+            .arg("branch")
+            .arg(delete_arg)
+            .arg(branch_name)
+            .output()?;
+
+        if output.status.success() {
+            return Ok(String::from_utf8(output.stdout)?);
+        }
+
+        Err(GitError::from(output))
+    }
+
     pub fn fetch() -> Result<String, GitError> {
         let output = Command::new("git").arg("fetch").output()?;
         if output.status.success() {
