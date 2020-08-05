@@ -47,6 +47,16 @@ fn main() -> Result<(), GitError> {
     .list_branches()?
     .branch_names()?;
 
+  if out.len() == 0 {
+    spinner.finish_with_message("Nothing to do!");
+    return Ok(());
+  }
+
+  if args.interactive {
+    spinner.finish_with_message("TODO: handle interactive mode");
+    return Ok(());
+  }
+
   spinner.finish_with_message(&format!("gone branches: {:?}", out));
 
   Ok(())
