@@ -18,12 +18,7 @@ impl<F> Git<F>
 where
   F: Fn(&str) -> (),
 {
-  pub fn from(
-    path: std::path::PathBuf,
-    force: bool,
-    interactive: bool,
-    report_progress: F,
-  ) -> Self {
+  pub fn from(path: std::path::PathBuf, report_progress: F) -> Self {
     Git {
       path,
       _report_progress: report_progress,
