@@ -41,13 +41,10 @@ fn main() -> Result<(), GitError> {
   spinner.set_message("tidying up...");
   spinner.enable_steady_tick(160);
 
-  let out = Git::from(args.path, |m| spinner.set_message(m))
-    .fetch()?
-    .prune()?
-    .list_branches()?
-    .branch_names()?;
+  let mut git = Git::from(args.path, |m| spinner.set_message(m));
+  let gone_branches = git.fetch()?.prune()?.list_branches()?.branch_names()?;
 
-  if out.len() == 0 {
+  if gone_branches.len() == 0 {
     spinner.finish_with_message("Nothing to do!");
     return Ok(());
   }
@@ -57,7 +54,10 @@ fn main() -> Result<(), GitError> {
     return Ok(());
   }
 
-  spinner.finish_with_message(&format!("gone branches: {:?}", out));
+  for branch_name in gone_branches {
+    git.delete(args.force, branch_name)?;
+  }
 
+  spinner.finish_with_message("All done!");
   Ok(())
 }
