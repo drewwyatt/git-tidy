@@ -1,10 +1,12 @@
 mod git;
+mod list;
 
 use indicatif::ProgressBar;
 use structopt::StructOpt;
 
 use git::models::GitError;
 use git::Git;
+use list::List;
 
 #[derive(StructOpt)]
 #[structopt(
@@ -33,31 +35,65 @@ struct Cli {
     help = r#"Path to git repository (defaults to ".")"#
   )]
   path: std::path::PathBuf,
+
+  #[structopt(
+    short,
+    long,
+    help = "Print output, but don't delete any branches"
+  )]
+  dry_run: bool
 }
 
 fn main() -> Result<(), GitError> {
   let args = Cli::from_args();
+
+  if args.dry_run {
+    println!("");
+    println!("📣 NOTE: --dry-run enabled, no branches will be deleted.");
+    println!("");
+  }
+
   let spinner = ProgressBar::new_spinner();
   spinner.set_message("tidying up...");
   spinner.enable_steady_tick(160);
 
   let mut git = Git::from(args.path, |m| spinner.set_message(m));
-  let gone_branches = git.fetch()?.prune()?.list_branches()?.branch_names()?;
+  let mut gone_branches = git.fetch()?.prune()?.list_branches()?.branch_names()?;
 
   if gone_branches.len() == 0 {
     spinner.finish_with_message("Nothing to do!");
     return Ok(());
   }
 
+
   if args.interactive {
-    spinner.finish_with_message("TODO: handle interactive mode");
-    return Ok(());
+    spinner.finish_and_clear();
+    let list = List::from(gone_branches);
+    gone_branches = list.present();
+    if gone_branches.len() == 0 {
+      println!("Nothing to do!");
+      return Ok(());
+    }
   }
 
-  for branch_name in gone_branches {
-    git.delete(args.force, branch_name)?;
+  if args.dry_run {
+    println!("Branches to delete:");
+    for branch in gone_branches {
+      println!("  - {}", branch);
+    }
+    println!("")
+  } else {
+    let spinner = ProgressBar::new_spinner();
+    spinner.set_message("deleting branches...");
+    spinner.enable_steady_tick(160);
+
+    for branch_name in gone_branches {
+      spinner.set_message(&format!("deleting \"{}\"...", branch_name));
+      git.delete(args.force, branch_name)?;
+    }
+
+    spinner.finish_with_message("All done!");
   }
 
-  spinner.finish_with_message("All done!");
   Ok(())
 }

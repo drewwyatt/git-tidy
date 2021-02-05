@@ -9,6 +9,7 @@ where
   F: Fn(&str) -> (),
 {
   gone_branch_regex: Regex,
+  #[allow(dead_code)]
   path: std::path::PathBuf,
   output: Option<String>,
   _report_progress: F,
