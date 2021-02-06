@@ -29,13 +29,6 @@ struct Cli {
     )]
     interactive: bool,
 
-    #[structopt(
-        parse(from_os_str),
-        default_value = ".",
-        help = r#"Path to git repository (defaults to ".")"#
-    )]
-    path: std::path::PathBuf,
-
     #[structopt(short, long, help = "Print output, but don't delete any branches")]
     dry_run: bool,
 }
@@ -53,10 +46,10 @@ fn main() -> Result<(), GitError> {
     spinner.set_message("tidying up...");
     spinner.enable_steady_tick(160);
 
-    let mut git = Git::from(args.path, |m| spinner.set_message(m));
+    let mut git = Git::new(|m| spinner.set_message(m));
     let mut gone_branches = git.fetch()?.prune()?.list_branches()?.branch_names()?;
 
-    if gone_branches.len() == 0 {
+    if gone_branches.is_empty() {
         spinner.finish_with_message("Nothing to do!");
         return Ok(());
     }
@@ -64,7 +57,7 @@ fn main() -> Result<(), GitError> {
     if args.interactive {
         spinner.finish_and_clear();
         gone_branches = Prompt::with(gone_branches);
-        if gone_branches.len() == 0 {
+        if gone_branches.is_empty() {
             println!("Nothing to do!");
             return Ok(());
         }
