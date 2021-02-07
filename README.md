@@ -4,6 +4,8 @@
 
 Tidy up stale git branches.
 
+[![asciicast](https://asciinema.org/a/389715.svg)](https://asciinema.org/a/389715)
+
 ## Installation
 
 ### Cargo
