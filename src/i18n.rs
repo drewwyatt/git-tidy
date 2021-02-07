@@ -21,7 +21,7 @@ impl<'a> ToString for Text<'a> {
             Text::DeletingBranch(name) => format!("Deleting ‘{}’...", name),
             Text::DeletingBranches => "Deleting branches...".into(),
             Text::DryRunEnabled => {
-                "📣 NOTE: --dry-run enabled, no branches will be deleted.".into()
+                "\n📣 NOTE: --dry-run enabled, no branches will be deleted.\n".into()
             }
             Text::FinishedWithErrors => "Finished with errors:".into(),
             Text::NoBranchesDeleted => "No branches were deleted.".into(),
