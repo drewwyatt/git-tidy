@@ -13,10 +13,7 @@ impl Prompt {
 
         selections
             .into_iter()
-            .map(|idx| {
-                println!("removing idx: {} from: {:?}", idx, branches);
-                branches.swap_remove(idx)
-            })
+            .map(|idx| branches.swap_remove(idx))
             .rev() // sort back to ascending order
             .collect()
     }

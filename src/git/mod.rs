@@ -29,7 +29,7 @@ where
         }
     }
 
-    pub fn delete(&mut self, force: bool, branch_name: String) -> Result<&mut Self, GitError> {
+    pub fn delete(&mut self, force: bool, branch_name: &str) -> Result<&mut Self, GitError> {
         // TODO: figure out how to prevent getting the delete arg in 2 places
         let delete_arg = if force { "-D" } else { "-d" };
         self.report_progress(&format!(
