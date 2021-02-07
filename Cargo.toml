@@ -1,8 +1,9 @@
 [package]
 name = "git-tidy"
 description = "Tidy up stale git branches."
-version = "2.0.0"
-authors = ["Drew Wyatt <drew.j.wyatt@gmail.com>"]
+version = "2.0.1"
+authors = ["Drew Wyatt <drew.j.wyatt@gmail.com>",
+           "Dalton Claybrook <dalton.claybrook@gmail.com>"]
 license = "MIT"
 edition = "2018"
 repository = "https://github.com/drewwyatt/git-tidy"
