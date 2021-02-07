@@ -12,6 +12,29 @@ Tidy up stale git branches.
 $ cargo install git-tidy
 ```
 
+### Previous versions
+
+Newer versions of `git-tidy` are (for now) only available from [crates.io](https://crates.io/crates/git-tidy), but you can still get `1.0.0` from the following places:
+
+#### Homebrew
+
+```bash
+$ brew tap drewwyatt/tap
+$ brew install git-tidy
+```
+
+#### Snapcraft
+
+```bash
+$ sudo snap install git-tidy
+```
+
+#### Go
+
+```bash
+$ go get -u github.com/drewwyatt/git-tidy
+```
+
 ## Usage
 
 ```bash
