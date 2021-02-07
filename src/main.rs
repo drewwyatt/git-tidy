@@ -1,4 +1,5 @@
 mod git;
+mod i18n;
 mod prompt;
 
 use indicatif::ProgressBar;
@@ -6,6 +7,7 @@ use structopt::StructOpt;
 
 use git::models::GitError;
 use git::Git;
+use i18n::Text;
 use prompt::Prompt;
 
 #[derive(StructOpt)]
@@ -43,7 +45,7 @@ fn main() -> Result<(), GitError> {
     }
 
     let spinner = ProgressBar::new_spinner();
-    spinner.set_message("tidying up...");
+    spinner.set_message(&Text::StartupMessage.to_string());
     spinner.enable_steady_tick(160);
 
     let mut git = Git::new(|m| spinner.set_message(m));
