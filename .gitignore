@@ -3,3 +3,8 @@ gitclean
 git-tidy
 *.snap
 coverage.txt
+
+
+#Added by cargo
+
+/target

@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  cargo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        command: [fmt, build]
+        include:
+          - command: fmt
+            args: -- --check
+          - command: build
+            args: --verbose
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Run ${{ matrix.command }}
+      uses: actions-rs/cargo@v1
+      with:
+        command: ${{ matrix.command }}
+        args: ${{ matrix.args }}

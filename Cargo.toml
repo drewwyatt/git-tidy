@@ -1,0 +1,19 @@
+[package]
+name = "git-tidy"
+description = "Tidy up stale git branches."
+version = "2.0.1"
+authors = ["Drew Wyatt <drew.j.wyatt@gmail.com>",
+           "Dalton Claybrook <dalton.claybrook@gmail.com>"]
+license = "MIT"
+edition = "2018"
+repository = "https://github.com/drewwyatt/git-tidy"
+keywords = ["git", "cli", "command-line", "command-line-tool"]
+categories = ["command-line-utilities"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dialoguer = "0.7.1"
+indicatif = "0.15.0"
+regex = "1"
+structopt = { version = "0.3" }

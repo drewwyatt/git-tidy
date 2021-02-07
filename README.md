@@ -1,29 +1,39 @@
 # 🗑 git-tidy
 
-[![GitHub](https://img.shields.io/github/license/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/drewwyatt/git-tidy.svg)](https://github.com/drewwyatt/git-tidy/releases) [![codecov](https://codecov.io/gh/drewwyatt/git-tidy/branch/master/graph/badge.svg)](https://codecov.io/gh/drewwyatt/git-tidy) [![Go Report Card](https://goreportcard.com/badge/github.com/drewwyatt/git-tidy)](https://goreportcard.com/report/github.com/drewwyatt/git-tidy)
+[![crates.io](https://img.shields.io/crates/v/git-tidy?style=flat-square)](https://crates.io/crates/git-tidy)
 
-Delete local git branches that have a remote tracking branch that is `: gone`.
+Tidy up stale git branches.
 
-[![asciicast](https://asciinema.org/a/1HgPIGWL1U24nR998vJEvPOHN.svg)](https://asciinema.org/a/1HgPIGWL1U24nR998vJEvPOHN)
+[![asciicast](https://asciinema.org/a/389715.svg)](https://asciinema.org/a/389715)
 
 ## Installation
 
-### Homebrew
+### Cargo
+
+```bash
+$ cargo install git-tidy
+```
+
+### Previous versions
+
+Newer versions of `git-tidy` are (for now) only available from [crates.io](https://crates.io/crates/git-tidy), but you can still get `1.0.0` from the following places:
+
+#### Homebrew
 
 ```bash
 $ brew tap drewwyatt/tap
 $ brew install git-tidy
 ```
 
-### Snapcraft &middot; [![Snap Status](https://build.snapcraft.io/badge/drewwyatt/git-tidy.svg)](https://build.snapcraft.io/user/drewwyatt/git-tidy)
+#### Snapcraft
 
 ```bash
 $ sudo snap install git-tidy
 ```
 
-### Go
+#### Go
 
-```#!bash
+```bash
 $ go get -u github.com/drewwyatt/git-tidy
 ```
 
@@ -43,7 +53,7 @@ $ git tidy --force
 
 ### Interactive
 
-Present all ": gone" branches in a checkbox list, allowing user to opt-in to deletions.
+Present all stale (": gone") branches in a checkbox list, allowing user to opt-in to deletions.
 
 ```bash
 $ git tidy -i
@@ -53,14 +63,4 @@ $ git tidy --interactive
 $ git tidy -if
 # or
 $ git tidy --interactive --force
-```
-
-### Path
-
-By default, `tidy` will execute all commands in the **current directory** (`.`), however, you can pass a path to another git repository after any/all other flags.
-
-```bash
-$ git tidy ../some/other/repo
-# with flags
-$ git tidy -if ../some/other/repo
 ```
