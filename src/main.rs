@@ -74,12 +74,28 @@ fn main() -> Result<(), GitError> {
         spinner.set_message("deleting branches...");
         spinner.enable_steady_tick(160);
 
+        let mut deletion_errors: Vec<String> = vec![];
         for branch_name in gone_branches {
             spinner.set_message(&format!("deleting \"{}\"...", branch_name));
-            git.delete(args.force, branch_name)?;
+            match git.delete(args.force, branch_name) {
+                Err(GitError::CommandError(msg)) => deletion_errors.push(msg),
+                Err(GitError::ExecError(msg)) => deletion_errors.push(msg),
+                Err(GitError::ParseError(msg)) => deletion_errors.push(msg),
+                Err(GitError::UnknownError) => {
+                    deletion_errors.push(String::from("Unknown error encountered."))
+                }
+                _ => (),
+            }
         }
 
-        spinner.finish_with_message("All done!");
+        if deletion_errors.is_empty() {
+            spinner.finish_with_message("All done!");
+        } else {
+            spinner.finish_with_message("Finished with errors.");
+            for error in deletion_errors {
+                println!("  - {}", error);
+            }
+        }
     }
 
     Ok(())
