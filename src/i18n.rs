@@ -1,4 +1,5 @@
 use std::string::ToString;
+
 pub enum Text<'a> {
     StartupMessage,
     DeletingBranch(&'a str)
