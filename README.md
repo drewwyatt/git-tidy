@@ -1,5 +1,7 @@
 # 🗑 git-tidy
 
+[![crates.io](https://img.shields.io/crates/v/git-tidy?style=flat-square)](https://crates.io/crates/git-tidy)
+
 Tidy up stale git branches.
 
 ## Installation
