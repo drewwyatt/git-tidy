@@ -88,7 +88,14 @@ fn main() -> Result<(), GitError> {
             }
         }
 
-        spinner.finish_with_message("All done!");
+        if deletion_errors.is_empty() {
+            spinner.finish_with_message("All done!");
+        } else {
+            spinner.finish_with_message("Finished with errors.");
+            for error in deletion_errors {
+                println!("  - {}", error);
+            }
+        }
     }
 
     Ok(())
