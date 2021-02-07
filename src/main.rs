@@ -58,7 +58,7 @@ fn main() -> Result<(), GitError> {
     let mut stale_branches = gone_branches;
 
     if args.interactive {
-        stale_branches = Prompt::with(&stale_branches);
+        stale_branches = Prompt::with(stale_branches);
         if stale_branches.is_empty() {
             println!("Nothing to do!");
             return Ok(());
@@ -81,7 +81,7 @@ fn main() -> Result<(), GitError> {
                 .into_iter()
                 .fold((vec![], vec![]), |(mut del, mut err), branch_name| {
                     spinner.set_message(&format!("deleting \"{}\"...", branch_name));
-                    match git.delete(args.force, branch_name) {
+                    match git.delete(args.force, &branch_name) {
                         Err(GitError::CommandError(msg)) => err.push((branch_name, msg)),
                         Err(GitError::ExecError(msg)) => err.push((branch_name, msg)),
                         Err(GitError::ParseError(msg)) => err.push((branch_name, msg)),
