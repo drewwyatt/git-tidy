@@ -39,9 +39,7 @@ fn main() -> Result<(), GitError> {
     let args = Cli::from_args();
 
     if args.dry_run {
-        println!("");
-        println!("📣 NOTE: --dry-run enabled, no branches will be deleted.");
-        println!("");
+        println!("{}", Text::DryRunEnabled.to_string());
     }
 
     let spinner = ProgressBar::new_spinner();
@@ -52,7 +50,7 @@ fn main() -> Result<(), GitError> {
     let gone_branches = git.fetch()?.prune()?.list_branches()?.branch_names()?;
 
     if gone_branches.is_empty() {
-        spinner.finish_with_message("Nothing to do!");
+        spinner.finish_with_message(&Text::NothingToDo.to_string());
         return Ok(());
     }
 
@@ -62,35 +60,34 @@ fn main() -> Result<(), GitError> {
     if args.interactive {
         stale_branches = Prompt::with(stale_branches);
         if stale_branches.is_empty() {
-            println!("Nothing to do!");
+            println!("{}", Text::NothingToDo.to_string());
             return Ok(());
         }
     }
 
     if args.dry_run {
-        println!("Branches to delete:");
+        println!("{}", Text::BranchesToDelete.to_string());
         for branch in stale_branches {
             println!("  - {}", branch);
         }
         println!("")
     } else {
         let spinner = ProgressBar::new_spinner();
-        spinner.set_message("deleting branches...");
+        spinner.set_message(&Text::DeletingBranches.to_string());
         spinner.enable_steady_tick(160);
 
         let (deleted_branches, deletion_errors) =
             stale_branches
                 .into_iter()
                 .fold((vec![], vec![]), |(mut del, mut err), branch_name| {
-                    spinner.set_message(&format!("deleting \"{}\"...", branch_name));
+                    spinner.set_message(&Text::DeletingBranch(&branch_name).to_string());
                     match git.delete(args.force, &branch_name) {
                         Err(GitError::CommandError(msg)) => err.push((branch_name, msg)),
                         Err(GitError::ExecError(msg)) => err.push((branch_name, msg)),
                         Err(GitError::ParseError(msg)) => err.push((branch_name, msg)),
-                        Err(GitError::UnknownError) => err.push((
-                            branch_name,
-                            String::from("An unknown error was encountered"),
-                        )),
+                        Err(GitError::UnknownError) => {
+                            err.push((branch_name, Text::UnknownErrorEncountered.to_string()))
+                        }
                         _ => del.push(branch_name),
                     };
 
@@ -99,16 +96,16 @@ fn main() -> Result<(), GitError> {
 
         spinner.finish_and_clear();
         if deleted_branches.is_empty() {
-            println!("No branches were deleted.");
+            println!("{}", Text::NoBranchesDeleted.to_string());
         } else {
-            println!("Branches deleted:");
+            println!("{}", Text::BranchesDeleted.to_string());
             for branch_name in deleted_branches {
                 println!("  - {}", branch_name);
             }
         }
 
         if !deletion_errors.is_empty() {
-            println!("Finished with errors:");
+            println!("{}", Text::FinishedWithErrors.to_string());
             for (branch_name, error) in deletion_errors {
                 println!("  - {}: {}", branch_name, error);
             }
