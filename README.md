@@ -14,6 +14,31 @@ Tidy up stale git branches.
 $ cargo install git-tidy
 ```
 
+#### ⚠️ You may need to update `cargo` for this ⚠️
+
+If you are seeing an error like the one in [this issue](https://github.com/drewwyatt/git-tidy/issues/45):
+
+```
+▪ cargo install git-tidy
+    Updating crates.io index
+  Installing git-tidy v2.0.1
+error: failed to compile `git-tidy v2.0.1`, intermediate artifacts can be found at `/tmp/cargo-installgtcftB`
+
+Caused by:
+  failed to select a version for the requirement `zeroize = "^0.9.3"`
+  candidate versions found which didn't match: 1.3.0, 1.2.0, 1.1.1, ...
+  location searched: crates.io index
+  required by package `dialoguer v0.7.1`
+      ... which is depended on by `git-tidy v2.0.1`
+```
+
+You can probably fix this by updating cargo with:
+
+```sh
+rustup update
+```
+
+
 ### Previous versions
 
 Newer versions of `git-tidy` are (for now) only available from [crates.io](https://crates.io/crates/git-tidy), but you can still get `1.0.0` from the following places:
