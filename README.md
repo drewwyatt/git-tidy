@@ -8,6 +8,13 @@ Tidy up stale git branches.
 
 ## Installation
 
+### Homebrew
+
+```bash
+$ brew tap drewwyatt/tap
+$ brew install git-tidy
+```
+
 ### Cargo
 
 ```bash
@@ -41,14 +48,7 @@ rustup update
 
 ### Previous versions
 
-Newer versions of `git-tidy` are (for now) only available from [crates.io](https://crates.io/crates/git-tidy), but you can still get `1.0.0` from the following places:
-
-#### Homebrew
-
-```bash
-$ brew tap drewwyatt/tap
-$ brew install git-tidy
-```
+Newer versions of `git-tidy` are (for now) only available from Homebrew and [crates.io](https://crates.io/crates/git-tidy), but you can still get `1.0.0` from the following places:
 
 #### Snapcraft
 
